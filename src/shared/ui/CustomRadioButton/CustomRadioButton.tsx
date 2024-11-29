@@ -1,19 +1,33 @@
 import { FC } from 'react';
-import { Radio, Group } from '@mantine/core';
+import { Radio, Stack } from '@mantine/core';
 
-export const CustomRadioButton: FC = () => {
+interface ICustomRadioButton {
+  options: string[];
+  selectedOption: string;
+  onOptionSelect: (option: string) => void;
+}
+
+export const CustomRadioButton: FC<ICustomRadioButton> = ({
+  options,
+  selectedOption,
+  onOptionSelect,
+}) => {
   return (
-    <Radio.Group
-      name="favoriteFramework"
-      label="Select your favorite framework/library"
-      size='xl'
-
-    >
-      <Group mt="lg" mb="lg">
-        <Radio value="react" label="React" size="md" color="teal" />
-        <Radio value="svelte" label="Svelte" size="md" color="teal" />
-        <Radio value="ng" label="Angular" size="md" color="teal" />
-      </Group>
+    <Radio.Group size="xl" aria-label="Выберите вариант">
+      <Stack mt="lg" mb="lg">
+        {options.map((option) => (
+          <Radio
+            size="md"
+            color="teal"
+            tabIndex={0}
+            key={option}
+            value={option}
+            label={option}
+            checked={selectedOption === option}
+            onChange={() => onOptionSelect(option)}
+          />
+        ))}
+      </Stack>
     </Radio.Group>
   );
 };
