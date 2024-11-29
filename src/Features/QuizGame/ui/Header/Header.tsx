@@ -4,11 +4,15 @@ import { Timer } from '../Timer/Timer';
 
 import styles from './Header.module.scss';
 
-const Header: FC = () => {
+interface IHeader {
+  timeLeft: number;
+}
+
+const Header: FC<IHeader> = ({ timeLeft }) => {
   return (
     <header className={styles.header}>
-      <h1 className={styles.title}>ИГРА</h1>
-      <Timer />
+      <h1 className={styles.title}>ТЕСТИРОВАНИЕ</h1>
+      <Timer timeLeft={timeLeft} />
     </header>
   );
 };

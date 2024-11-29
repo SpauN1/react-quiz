@@ -1,6 +1,10 @@
 import { FC } from 'react';
 import { Progress } from '@mantine/core';
 
-export const ProgressBar: FC = () => {
-  return <Progress radius="xl" size="lg" mb="lg" value={10} />;
+interface IProgressBar {
+  value: number;
+}
+
+export const ProgressBar: FC<IProgressBar> = ({ value }) => {
+  return <Progress radius="xl" size="lg" mb="lg" value={value} />;
 };

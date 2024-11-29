@@ -1,4 +1,4 @@
-import QuizPage from '../pages/QuizPage/QuizPage';
+import { QuizPage } from '../pages/QuizPage';
 
 import '@mantine/core/styles.css';
 import './styles/global.scss';
