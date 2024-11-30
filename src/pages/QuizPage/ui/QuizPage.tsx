@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { QuizGame } from '@/Features/QuizGame';
+import { QuizGame } from '@/features/quizGame';
 
 const QuizPage: FC = () => {
   return (
