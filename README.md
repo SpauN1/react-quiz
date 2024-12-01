@@ -1,6 +1,6 @@
 # react-quiz
 
-### 👀 [View project](https://react-quiz-psi-lime.vercel.app/)
+### 👀 <a href="https://react-quiz-six-kappa.vercel.app/" target="_blank">View project</a>
 
 ## 🛠 Stack
 
