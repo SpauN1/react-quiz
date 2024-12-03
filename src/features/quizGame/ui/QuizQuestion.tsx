@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { CustomRadioButton } from '@/shared/ui/CustomRadioButton/CustomRadioButton';
+import { CustomRadioButton } from '@/shared/ui';
 
 interface IQuizQuestion {
   question: { text: string; options: { text: string; isCorrect: boolean }[] };
