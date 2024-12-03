@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 
 import { quizQuestionsData } from '@/entities/quizQuestionsData/quizQuestionsData';
-import { CustomButton } from '@/shared/ui/CustomButton/CustomButton';
-import { GameResults } from './GameResults';
-import Header from './Header/Header';
-import { ProgressBar } from './ProgressBar';
-import { QuizQuestion } from './QuizQuestion';
+import { CustomButton, ProgressBar } from '@/shared/ui';
+import { GameResults } from '../GameResults';
+import { QuizQuestion } from '../QuizQuestion';
+import { Timer } from '../Timer/Timer';
+
+import styles from './QuizGame.module.scss';
 
 const totalQuestions = quizQuestionsData.length;
 
@@ -63,7 +64,11 @@ export const QuizGame: FC = () => {
 
   return (
     <>
-      <Header timeLeft={timeLeft} />
+      <header className={styles.header}>
+        <h1 className={styles.title}>ТЕСТИРОВАНИЕ</h1>
+        <Timer timeLeft={timeLeft} />
+      </header>
+
       <ProgressBar value={progressValue} />
       {!isFinished ? (
         <>
