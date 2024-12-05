@@ -13,7 +13,7 @@ export const CustomRadioButton: FC<ICustomRadioButton> = ({
   onOptionSelect,
 }) => {
   return (
-    <Radio.Group size="xl" aria-label="Выберите вариант">
+    <Radio.Group size="xl" aria-label="Выберите вариант" value={selectedOption}>
       <Stack mt="lg" mb="lg">
         {options.map((option) => (
           <Radio

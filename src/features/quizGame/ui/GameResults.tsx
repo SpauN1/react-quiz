@@ -18,9 +18,7 @@ export const GameResults: FC<IGameResults> = ({
       <p>
         Вы ответили на {score} из {totalQuestions} вопросов.
       </p>
-      <CustomButton handleAnswerClick={onRestart}>
-        Попробовать снова
-      </CustomButton>
+      <CustomButton onClick={onRestart}>Попробовать снова</CustomButton>
     </div>
   );
 };
