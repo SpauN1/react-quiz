@@ -3,18 +3,18 @@ import { Button } from '@mantine/core';
 
 interface ICustomButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  handleAnswerClick: () => void;
+  onClick: () => void;
 }
 
 export const CustomButton: FC<ICustomButton> = ({
   children,
-  handleAnswerClick,
+  onClick,
   disabled = false,
 }) => {
   return (
     <Button
       size="sm"
-      onClick={handleAnswerClick}
+      onClick={onClick}
       disabled={disabled}
       style={{
         '--button-padding-x': '2.5rem',

@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { Switch, useMantineTheme } from '@mantine/core';
 
-import { useThemSwitcher } from '../lib/useThemeSwitcher';
+import { useThemeSwitcher } from '../lib/useThemeSwitcher';
 
 export const ThemeSwitcher: FC = () => {
-  const { toggleColorScheme } = useThemSwitcher();
+  const { colorSchemeLS, toggleColorScheme } = useThemeSwitcher();
   const theme = useMantineTheme();
 
   const sunIcon = (
@@ -43,6 +43,7 @@ export const ThemeSwitcher: FC = () => {
       color="dark.4"
       onLabel={sunIcon}
       offLabel={moonIcon}
+      checked={colorSchemeLS === 'dark'}
       onClick={toggleColorScheme}
     />
   );

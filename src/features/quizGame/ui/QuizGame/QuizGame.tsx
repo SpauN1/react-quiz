@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
 import { quizQuestionsData } from '@/entities/quizQuestionsData/quizQuestionsData';
+import { getFromLocalStorage, saveToLocalStorage } from '@/shared/lib';
 import { CustomButton, ProgressBar } from '@/shared/ui';
 import { GameResults } from '../GameResults';
 import { QuizQuestion } from '../QuizQuestion';
@@ -16,6 +17,30 @@ export const QuizGame: FC = () => {
   const [score, setScore] = useState<number>(0);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(600);
+
+  useEffect(() => {
+    const savedData = getFromLocalStorage('quizData');
+
+    if (savedData) {
+      setCurrentQuestionIndex(savedData.currentQuestionIndex);
+      setSelectedOption(savedData.selectedOption);
+      setScore(savedData.score);
+      setIsFinished(savedData.isFinished);
+      setTimeLeft(savedData.timeLeft);
+    }
+  }, []);
+
+  useEffect(() => {
+    const dataToSave = {
+      currentQuestionIndex,
+      selectedOption,
+      score,
+      isFinished,
+      timeLeft,
+    };
+
+    saveToLocalStorage('quizData', dataToSave);
+  }, [currentQuestionIndex, isFinished, score, selectedOption, timeLeft]);
 
   useEffect(() => {
     if (timeLeft > 0 && !isFinished) {
@@ -77,17 +102,14 @@ export const QuizGame: FC = () => {
             selectedOption={selectedOption}
             onOptionSelect={handleOptionSelect}
           />
-          <CustomButton
-            handleAnswerClick={handleAnswerClick}
-            disabled={!selectedOption}
-          >
+          <CustomButton onClick={handleAnswerClick} disabled={!selectedOption}>
             Ответить
           </CustomButton>
         </>
       ) : (
         <GameResults
           score={score}
-          totalQuestions={quizQuestionsData.length}
+          totalQuestions={totalQuestions}
           onRestart={handleRestart}
         />
       )}
