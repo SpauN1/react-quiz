@@ -2,13 +2,13 @@ import { FC } from 'react';
 
 import { CustomButton } from '@/shared/ui/CustomButton/CustomButton';
 interface IGameResults {
-  score: number;
+  correctAnswer: number;
   totalQuestions: number;
   onRestart: () => void;
 }
 
 export const GameResults: FC<IGameResults> = ({
-  score,
+  correctAnswer,
   totalQuestions,
   onRestart,
 }) => {
@@ -16,7 +16,7 @@ export const GameResults: FC<IGameResults> = ({
     <div>
       <h2>Игра окончена!</h2>
       <p>
-        Вы ответили на {score} из {totalQuestions} вопросов.
+        Вы ответили на {correctAnswer} из {totalQuestions} вопросов.
       </p>
       <CustomButton onClick={onRestart}>Попробовать снова</CustomButton>
     </div>

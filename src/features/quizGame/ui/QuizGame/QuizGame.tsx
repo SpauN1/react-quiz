@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { quizQuestionsData } from '@/entities/quizQuestionsData/quizQuestionsData';
 import { getFromLocalStorage, saveToLocalStorage } from '@/shared/lib';
@@ -7,52 +8,72 @@ import { GameResults } from '../GameResults';
 import { QuizQuestion } from '../QuizQuestion';
 import { Timer } from '../Timer/Timer';
 
+import { selectedQuizGame } from '../../model/selectors';
+import {
+  decrementTime,
+  finishGame,
+  incrementCorrectAnswer,
+  restartGame,
+  setCurrentQuestionIndex,
+  setSelectedOption,
+  setTimeLeft,
+} from '../../model/slice';
+
 import styles from './QuizGame.module.scss';
 
 const totalQuestions = quizQuestionsData.length;
 
 export const QuizGame: FC = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const [selectedOption, setSelectedOption] = useState<string>('');
-  const [score, setScore] = useState<number>(0);
-  const [isFinished, setIsFinished] = useState<boolean>(false);
-  const [timeLeft, setTimeLeft] = useState<number>(600);
+  const dispatch = useDispatch();
+  const {
+    currentQuestionIndex,
+    selectedOption,
+    isFinished,
+    correctAnswer,
+    timeLeft,
+  } = useSelector(selectedQuizGame);
 
   useEffect(() => {
     const savedData = getFromLocalStorage('quizData');
 
     if (savedData) {
-      setCurrentQuestionIndex(savedData.currentQuestionIndex);
-      setSelectedOption(savedData.selectedOption);
-      setScore(savedData.score);
-      setIsFinished(savedData.isFinished);
-      setTimeLeft(savedData.timeLeft);
+      dispatch(setCurrentQuestionIndex(savedData.currentQuestionIndex));
+      dispatch(setSelectedOption(savedData.selectedOption));
+      dispatch(incrementCorrectAnswer(savedData.correctAnswer));
+      dispatch(finishGame(savedData.isFinished));
+      dispatch(setTimeLeft(savedData.timeLeft));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const dataToSave = {
       currentQuestionIndex,
       selectedOption,
-      score,
+      correctAnswer,
       isFinished,
       timeLeft,
     };
 
     saveToLocalStorage('quizData', dataToSave);
-  }, [currentQuestionIndex, isFinished, score, selectedOption, timeLeft]);
+  }, [
+    currentQuestionIndex,
+    isFinished,
+    correctAnswer,
+    selectedOption,
+    timeLeft,
+  ]);
 
   useEffect(() => {
     if (timeLeft > 0 && !isFinished) {
       const timerId = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
+        dispatch(decrementTime());
       }, 1000);
 
       return () => clearInterval(timerId);
     } else if (timeLeft === 0) {
-      setIsFinished(true);
+      dispatch(finishGame());
     }
-  }, [timeLeft, isFinished]);
+  }, [timeLeft, isFinished, dispatch]);
 
   const handleAnswerClick = () => {
     const currentQuestion = quizQuestionsData[currentQuestionIndex];
@@ -61,28 +82,24 @@ export const QuizGame: FC = () => {
     );
 
     if (selectedOption === correctOption?.text) {
-      setScore(score + 1);
+      dispatch(incrementCorrectAnswer());
     }
 
     if (currentQuestionIndex < totalQuestions - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption('');
+      dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
+      dispatch(setSelectedOption(''));
     } else {
-      setCurrentQuestionIndex(totalQuestions);
-      setIsFinished(true);
+      dispatch(setCurrentQuestionIndex(totalQuestions));
+      dispatch(finishGame());
     }
   };
 
   const handleOptionSelect = (option: string) => {
-    setSelectedOption(option);
+    dispatch(setSelectedOption(option));
   };
 
   const handleRestart = () => {
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setSelectedOption('');
-    setIsFinished(false);
-    setTimeLeft(600);
+    dispatch(restartGame());
   };
 
   const progressValue = (currentQuestionIndex / totalQuestions) * 100;
@@ -108,7 +125,7 @@ export const QuizGame: FC = () => {
         </>
       ) : (
         <GameResults
-          score={score}
+          correctAnswer={correctAnswer}
           totalQuestions={totalQuestions}
           onRestart={handleRestart}
         />
