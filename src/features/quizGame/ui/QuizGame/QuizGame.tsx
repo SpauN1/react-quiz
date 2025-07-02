@@ -12,11 +12,12 @@ import { selectedQuizGame } from '../../model/selectors';
 import {
   decrementTime,
   finishGame,
-  incrementCorrectAnswer,
+  setCorrectAnswer,
   restartGame,
   setCurrentQuestionIndex,
   setSelectedOption,
   setTimeLeft,
+  incrementCorrectAnswer,
 } from '../../model/slice';
 
 import styles from './QuizGame.module.scss';
@@ -39,7 +40,7 @@ export const QuizGame: FC = () => {
     if (savedData) {
       dispatch(setCurrentQuestionIndex(savedData.currentQuestionIndex));
       dispatch(setSelectedOption(savedData.selectedOption));
-      dispatch(incrementCorrectAnswer(savedData.correctAnswer));
+      dispatch(setCorrectAnswer(savedData.correctAnswer));
       dispatch(finishGame(savedData.isFinished));
       dispatch(setTimeLeft(savedData.timeLeft));
     }
@@ -71,7 +72,7 @@ export const QuizGame: FC = () => {
 
       return () => clearInterval(timerId);
     } else if (timeLeft === 0) {
-      dispatch(finishGame());
+      dispatch(finishGame(true));
     }
   }, [timeLeft, isFinished, dispatch]);
 
@@ -90,7 +91,7 @@ export const QuizGame: FC = () => {
       dispatch(setSelectedOption(''));
     } else {
       dispatch(setCurrentQuestionIndex(totalQuestions));
-      dispatch(finishGame());
+      dispatch(finishGame(true));
     }
   };
 
