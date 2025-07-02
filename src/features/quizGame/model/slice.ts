@@ -23,11 +23,14 @@ export const quizGameSlice = createSlice({
     setTimeLeft(state, action: PayloadAction<number>) {
       state.timeLeft = action.payload;
     },
+    setCorrectAnswer: (state, action: PayloadAction<number>) => {
+      state.correctAnswer = action.payload;
+    },
     incrementCorrectAnswer: (state) => {
       state.correctAnswer += 1;
     },
-    finishGame(state) {
-      state.isFinished = true;
+    finishGame(state, action: PayloadAction<boolean>) {
+      state.isFinished = action.payload;
     },
     decrementTime(state) {
       if (state.timeLeft > 0) {
@@ -49,9 +52,10 @@ export const {
   setSelectedOption,
   restartGame,
   finishGame,
-  incrementCorrectAnswer,
+  setCorrectAnswer,
   setTimeLeft,
   decrementTime,
+  incrementCorrectAnswer,
 } = quizGameSlice.actions;
 
 export default quizGameSlice.reducer;
